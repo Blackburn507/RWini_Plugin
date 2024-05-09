@@ -1,10 +1,10 @@
 {
   "name": "rwiniplugin",
-  "displayName": "rwini_plugin",
+  "displayName": "RWini_Plugin",
   "description": "A plugin which improves the coding for MODs of a RTS game RustedWarfare.",
   "publisher": "Blackburn",
   "icon": "rwp.png",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "engines": {
     "vscode": "^1.80.0"
   },

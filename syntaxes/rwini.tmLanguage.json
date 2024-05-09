@@ -1,0 +1,213 @@
+{
+	"name": "rwini",
+	"scopeName": "source.ini",
+	"patterns": [
+		{"include": "#comment"},
+		{"include": "#multilineComment"},
+	    {"include": "#section"},
+	    {"include": "#key"},
+		{"include": "#templateKey"},
+	    {"include": "#value"},
+		{"include": "#multilineValue"}
+    ],
+	"repository": {
+		"comment": {
+			"name": "comment",
+			"match": "^#.*"
+		},
+
+		"multilineComment": {
+			"name": "comment.multilineComment",
+			"begin": "^ *\"\"\"",
+			"end": "\"\"\""
+		},
+
+		"section":{
+			"name": "variable.parameter.section",
+			"match": "(?<!\\w+ *)\\[\\w+_?.*]"
+		},
+
+		"key": {
+			"name": "key",
+			"match": "(?<!\\w+: *)\\w+:"
+		},
+
+		"templateKey":{
+			"name": "storage.type.templateKey",
+			"match": "(?<!\\w+: *)(@\\w+)"
+		},
+        
+
+
+		"value": {
+			"name": "value",
+			"begin": "(?<=\\w+: *)(?!\"\"\")",
+			"end": "\n",
+			"patterns": [
+				{"include": "#bool"},
+			    {"include": "#number"}, 
+				{"include": "#string"}, 
+				{"include": "#localRef"},
+				{"include": "#filePath"},
+				{"include": "#function"},
+				{"include": "#dynamicValue"}
+		   ]
+		},
+
+		"multilineValue": {
+			"name": "multilineValue",
+			"begin": "(?<=\\w+: *)\"\"\"",
+			"end": "\"\"\"",
+			"patterns": [
+				{"include": "#bool"},
+			    {"include": "#number"}, 
+				{"include": "#string"}, 
+				{"include": "#localRef"},
+				{"include": "#filePath"},
+				{"include": "#function"},
+				{"include": "#dynamicValue"}
+		   ]
+		},
+
+		
+		"bool": {
+			"name": "constant.language.constantBool",
+			"match": "true|false|none"
+		},
+		"number": {
+			"name": "constant.numeric.constantNumber",
+			"match": "(?<!\\w+)\\d+\\.?\\d*"
+		},
+		"localRef": {
+			"name": "storage.type.localRef",
+			"match": "\\${[^{}]*}"
+		},
+		"filePath": {
+			"name": "support.class.filePath",
+			"match": "(ROOT:)?[\\w\\/]+\\.(ini|txt|template|png|ogg|wav)"
+		},
+
+
+		"function": {
+            "name": "dynamicValue",
+			"patterns": [
+				{"include": "#functionNumber"},
+				{"include": "#functionString"},
+				{"include": "#functionOther"}
+			]
+		},
+		"functionNumber": {
+			"name": "support.function",
+			"begin": "(distance|distanceSquared|distanceBetween|distanceBetweenSquared|int|length|squareRoot|min|max|cos|sin|directionBetween|rnd)\\(",
+			"end": "\\)",
+			"patterns":[
+				{"include": "#dynamicValue"},
+				{"include": "#number"},
+				{"include": "#localRef"},
+				{"include": "#function"}
+			]
+		},
+		"functionString": {
+			"name": "support.function",
+			"begin": "(%|debug|debugPassThrough|str|substring|length|uppercase|lowercase)\\(",
+			"end": "\\)",
+			"patterns":[
+				{"include": "#dynamicValue"},
+				{"include": "#number"},
+				{"include": "#localRef"},
+				{"include": "#function"}
+			]
+		},
+		"functionOther": {
+			"name": "support.function",
+			"begin": "(select)\\(",
+			"end": "\\)",
+			"patterns":[
+				{"include": "#dynamicValue"},
+				{"include": "#number"},
+				{"include": "#localRef"},
+				{"include": "#function"}
+			]
+		},
+
+
+		"dynamicValue": {
+            "name": "dynamicValue",
+			"patterns": [
+				{"include": "#operator"},
+				{"include": "#customVariable"},
+				{"include": "#customVariableWithPara"},
+				{"include": "#unitRef"},
+				{"include": "#unitRefWithPara"},
+				{"include": "#marker"},
+				{"include": "#boolRef"},
+				{"include": "#propertyRef"}
+			]
+		},
+
+		"operator": {
+			"name": "operator",
+			"patterns": [
+				{"include": "#operatorBool"},
+				{"include": "#operatorJudge"},
+				{"include": "#operatorNumber"}
+		   ]
+		},
+	    "operatorBool": {
+		    "name": "keyword.control.logicBool",
+		    "match": "(?<!\\w+)(if|not|or|and)(?= )"
+		},
+		"operatorNumber": {
+		    "name": "keyword.operator.operatorNumber",
+		    "match": "\\+|-|\\*|\\/|%|(?<![!<>=])="
+		},
+		"operatorJudge": {
+		    "name": "keyword.other.operatorJudge",
+		    "match": "==|!=|<(?!=)|>(?!=)|<=|>="
+		},
+
+		"string": {
+			"name": "string.quoted.double",
+			"begin": "\"",
+			"end": "\""
+		},
+		"customVariable": {
+			"name": "variable.parameter.customVariable",
+			"match": "memory\\.\\w+|resource\\.\\w+|null"
+		},
+		"customVariableWithPara": {
+			"name": "variable.parameter.customVariableWithPara",
+			"begin": "(readUnitMemory|eventData)\\(",
+			"end": "\\)",
+			"patterns":[{"include": "#string"}]
+		},
+		"unitRef": {
+			"name": "support.class.unitRef",
+			"match": "(self|parent|attacking|transporting|lastDamageBy|activeWaypointTarget|nearestUnit|nullUnit|attachment|thisActionTarget|eventSource|globalSearchForFirstUnit|customTarget1|customTarget2)(?!\\()"
+		},
+		"unitRefWithPara": {
+			"name": "support.class.unitRef",
+			"begin": "(self|parent|attacking|transporting|lastDamageBy|activeWaypointTarget|nearestUnit|nullUnit|attachment|thisActionTarget|eventSource|globalSearchForFirstUnit|customTarget1|customTarget2)\\(",
+			"end": "\\)",
+			"patterns":[{"include": "#string"}]
+		},
+		"marker":{
+			"name": "support.class.marker",
+			"begin": "(getAsMarker|getOffsetAbsolute|getOffsetRelative|createMarker)\\(",
+			"end": "\\)",
+			"patterns":[{"include": "#dynamicValue"}]
+		},
+		"boolRef":{
+			"name": "constant.language.boolRef",
+			"match": "\\.(isUnderwater|underwater|ground|isAtGroundHeight|flying|isFlying|isMoving|isAtTopSpeed|isInWater|isOverwater|isOverLiquid|isOverClift|isOverPassableTile|isOverOpenLand|height|hasResources|isResourceLargerThan|isEnergyRecharging|isAmmoEmpty|isEnergyFull|isEnergyEmpty|hasFlag|hasTags|globalTeamTags|isAttacking|hasActiveWaypoint|transportingUnitWithTags|isTransportUnloading|hasParent|hasTakenDamage|isOnNeutralTeam|hasUnitInTeam|noUnitInTeam|isInMap|isReversing|isControlledByAI|isAtTopSpeed|completed|teamDefeatedTech|teamWipedOut|teamVictory)"
+		},
+		"propertyRef":{
+			"name": "constant.numeric.propertyRef",
+			"match": "\\.(height|maxHp|hp|ammo|maxShield|maxEnergy|ammoIncludingQueued|energy|energyIncludingQueued|shield|kills|queueSize|teamId|x|y|z|dir|priceCredits|tags|transportingCount|numberOfAttachedUnits|isAtimeAlive|lastConverted|customTimer|numberOfUnitsInTeam|numberOfUnitsInAllyNotOwnTeam|numberOfUnitsInEnemyTeam|numberOfUnitsInNeutralTeam|numberOfUnitsInAggressiveTeam|numberOfUnitsInAllTeams|mapWidth|mapHeight|numberOfQueuedWaypoints|speed|maxspeed|builtAmount|completed|maxMoveSpeed|numberOfConnections)"
+		}
+		
+	}
+}
+
+
+

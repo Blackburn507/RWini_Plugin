@@ -152,7 +152,7 @@ function activate(context) {
     return value
   }
 
-  class mergeMultiline {
+  class Multiline {
     constructor(document) {
       const splitedDocument = document.getText().split('"""')
       const mergedLines = []
@@ -182,7 +182,7 @@ function activate(context) {
     }
   }
 
-  class getCustomVariable {
+  class CustomVariable {
     constructor(document) {
       const memoryNumber = document
         .getText()
@@ -241,10 +241,10 @@ function activate(context) {
   const tokenModifiers = ['default']
   const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers)
 
-  class provider {
+  class Provider {
     provideDocumentSemanticTokens(document) {
       const builder = new vscode.SemanticTokensBuilder()
-      const customVariables = new getCustomVariable(document)
+      const customVariables = new CustomVariable(document)
       const allVariables = []
       for (const variableType of customVariables) {
         customVariables[variableType].forEach(variable =>
@@ -292,7 +292,7 @@ function activate(context) {
   const semanticProvider =
     vscode.languages.registerDocumentSemanticTokensProvider(
       selector,
-      new provider(),
+      new Provider(),
       legend,
     )
 
@@ -354,7 +354,7 @@ function activate(context) {
   )
 
   function getAllCustomVariableCompletion(document) {
-    const customVariableCompletions = new getCustomVariable(document).memoryNumber
+    const customVariableCompletions = new CustomVariable(document).memoryNumber
       .map(names => {
         return new vscode.CompletionItem(
           'memory.'.concat(names),
@@ -362,7 +362,7 @@ function activate(context) {
         )
       })
       .concat(
-        new getCustomVariable(document).memoryFloat.map(names => {
+        new CustomVariable(document).memoryFloat.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Constant,
@@ -370,7 +370,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new getCustomVariable(document).memoryBool.map(names => {
+        new CustomVariable(document).memoryBool.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Constant,
@@ -378,7 +378,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new getCustomVariable(document).resourceNumber.map(names => {
+        new CustomVariable(document).resourceNumber.map(names => {
           return new vscode.CompletionItem(
             'resource.'.concat(names),
             vscode.CompletionItemKind.Constant,
@@ -386,7 +386,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new getCustomVariable(document).memoryUnit.map(names => {
+        new CustomVariable(document).memoryUnit.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Field,
@@ -394,7 +394,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new getCustomVariable(document).memoryString.map(names => {
+        new CustomVariable(document).memoryString.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Text,
@@ -440,7 +440,7 @@ function activate(context) {
                 break
               case 'memory':
                 {
-                  const customVariables = new getCustomVariable(document)
+                  const customVariables = new CustomVariable(document)
                   for (const variableType of customVariables) {
                     customVariables[variableType].forEach(variable =>
                       memorys.push(variable),
@@ -536,7 +536,7 @@ function activate(context) {
                 }),
               )
               .concat(
-                new getCustomVariable(document).resourceNumber.map(names => {
+                new CustomVariable(document).resourceNumber.map(names => {
                   return new vscode.CompletionItem(
                     'resource.'.concat(names),
                     vscode.CompletionItemKind.Constant,
@@ -594,7 +594,7 @@ function activate(context) {
         if (valueInfo != undefined) {
           return new vscode.Hover(`type: ${valueInfo[0]}`)
         } else {
-          const customVariables = new getCustomVariable(document)
+          const customVariables = new CustomVariable(document)
           for (const variable of customVariables) {
             if (customVariables[variable].includes(value)) {
               return new vscode.Hover(`type: ${variable}`)
@@ -871,7 +871,7 @@ function activate(context) {
         }
       }
     }
-    const multilines = new mergeMultiline(event.document)
+    const multilines = new Multiline(event.document)
     for (const line of multilines.mergedLines) {
       //Check multiline
       const currentKey = multilines.keys[line]

@@ -167,7 +167,7 @@ function activate(context) {
         for (const j = 0; j < i; j++) {
           startPosition += splitedDocument[j].length + 3
         }
-        for (const line in linesBefore) {
+        for (const line of linesBefore) {
           lastLine = linesBefore[line]
         }
         mergedLines.push(singleMergedLine)
@@ -246,7 +246,7 @@ function activate(context) {
       const builder = new vscode.SemanticTokensBuilder()
       const customVariables = new getCustomVariable(document)
       const allVariables = []
-      for (const variableType in customVariables) {
+      for (const variableType of customVariables) {
         customVariables[variableType].forEach(variable =>
           allVariables.push(variable),
         )
@@ -441,7 +441,7 @@ function activate(context) {
               case 'memory':
                 {
                   const customVariables = new getCustomVariable(document)
-                  for (const variableType in customVariables) {
+                  for (const variableType of customVariables) {
                     customVariables[variableType].forEach(variable =>
                       memorys.push(variable),
                     )
@@ -561,7 +561,7 @@ function activate(context) {
           document.getWordRangeAtPosition(position, /@?\w+/),
         )
         const occurSections = ''
-        for (const section in allKeys) {
+        for (const section of allKeys) {
           if (allKeys[section][key] != undefined) {
             occurSections += `[${section}](ValueType: ${allKeys[section][key][0]})  `
           } else {
@@ -595,7 +595,7 @@ function activate(context) {
           return new vscode.Hover(`type: ${valueInfo[0]}`)
         } else {
           const customVariables = new getCustomVariable(document)
-          for (const variable in customVariables) {
+          for (const variable of customVariables) {
             if (customVariables[variable].includes(value)) {
               return new vscode.Hover(`type: ${variable}`)
             }
@@ -872,7 +872,7 @@ function activate(context) {
       }
     }
     const multilines = new mergeMultiline(event.document)
-    for (const line in multilines.mergedLines) {
+    for (const line of multilines.mergedLines) {
       //Check multiline
       const currentKey = multilines.keys[line]
       const valueStartPosition = new indexToPosition(

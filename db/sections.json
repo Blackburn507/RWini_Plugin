@@ -1,0 +1,23 @@
+{
+    "core": "core",
+    "canBuild": "canBuild_",
+    "graphics": "graphics",
+    "attack": "attack",
+    "turret": "turret_",
+    "projectile": "projectile_",
+    "movement": "movement",
+    "ai": "ai",
+    "arm": "arm_",
+    "leg": "leg_",
+    "attachment": "attachment_",
+    "effect": "effect_",
+    "animation": "animation_",
+    "action": "action_",
+    "hiddenAction": "hiddenAction_",
+    "placementRule": "placementRule_",
+    "resource": "resource_",
+    "global": "global_resource_",
+    "decal": "decal_",
+    "comment": "comment_",
+    "template": "template_"
+}

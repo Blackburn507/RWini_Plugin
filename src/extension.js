@@ -786,7 +786,9 @@ function activate(context) {
   vscode.workspace.onDidChangeTextDocument(event => {
     const diagnostics = []
     const totalLineNumber = event.document.getText().split('\n').length
-    const allSections = event.document.getText().matchAll(/(?<=\n *\[)[^_\]]+/gim)
+    const allSections = event.document
+      .getText()
+      .matchAll(/(?<=\n *\[)[^_\]]+/gim)
     for (const section of allSections) {
       //Check section
       if (sections[section[0]] == undefined) {

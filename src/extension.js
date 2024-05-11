@@ -11,8 +11,8 @@ function activate(context) {
   //Parsing functions
   class indexToPosition {
     constructor(index, text) {
-      const lineNumber = 0
-      const lastNewLine = 0
+      let lineNumber = 0
+      let lastNewLine = 0
       for (let i = 0; i < index; i++) {
         if (text[i] == '\n') {
           lineNumber += 1
@@ -25,8 +25,8 @@ function activate(context) {
   }
 
   function positionToIndex(position, text) {
-    const i = 0
-    const lineNumber = 0
+    let i = 0
+    let lineNumber = 0
     while (lineNumber < position.line) {
       if (text[i] == '\n') {
         lineNumber++
@@ -37,11 +37,11 @@ function activate(context) {
   }
 
   function getIfMultiline(document, position) {
-    const matchedMultlineNotations = document
+    let matchedMultlineNotations = document
       .getText()
       .substring(0, positionToIndex(position, document.getText()))
       .matchAll(/\"\"\"/g)
-    const number = [...matchedMultlineNotations].length
+    let number = [...matchedMultlineNotations].length
     if (number % 2 == 1) {
       return true
     } else {
@@ -50,7 +50,7 @@ function activate(context) {
   }
 
   function sectionNameCorrection(inputSectionName) {
-    const outputSectionName = ''
+    let outputSectionName = ''
     switch (inputSectionName) {
       case 'arm':
         outputSectionName = 'leg'
@@ -76,22 +76,22 @@ function activate(context) {
 
   function getSection(document, position) {
     //Get current section
-    const offset = 0
+    var offset = 0
     while (offset < document.lineCount && finding == null) {
-      const finding = document
+      var finding = document
         .lineAt(position.line - offset)
         .text.match(/(?<![^ ]+ *)\[/)
       if (finding != null) {
-        const begin = document.lineAt(position.line - offset).text.indexOf('[')
+        var begin = document.lineAt(position.line - offset).text.indexOf('[')
         if (document.lineAt(position.line - offset).text.indexOf('_') > 0) {
-          const end = document.lineAt(position.line - offset).text.indexOf('_')
+          var end = document.lineAt(position.line - offset).text.indexOf('_')
         } else {
-          const end = document.lineAt(position.line - offset).text.indexOf(']')
+          var end = document.lineAt(position.line - offset).text.indexOf(']')
         }
-        const currentSection0 = document
+        let currentSection0 = document
           .lineAt(position.line - offset)
           .text.substring(begin + 1, end)
-        const currentSection = sectionNameCorrection(currentSection0)
+        let currentSection = sectionNameCorrection(currentSection0)
         return currentSection
       }
       offset++
@@ -100,11 +100,11 @@ function activate(context) {
 
   function getCustomSections(sectionName, document) {
     //Get custom section names
-    const allCustomSections = document.getText().match(/(?<=\n *\[)\w+/gm)
-    const customSections = []
+    let allCustomSections = document.getText().match(/(?<=\n *\[)\w+/gm)
+    let customSections = []
     allCustomSections.map(inputSection => {
       if (sectionNameCorrection(inputSection.split('_')[0]) == sectionName) {
-        const outputSection = inputSection.split('_')[1]
+        let outputSection = inputSection.split('_')[1]
         customSections.push(outputSection)
       }
     })
@@ -113,13 +113,13 @@ function activate(context) {
 
   function getKeyInMultipleLine(document, position) {
     if (getIfMultiline(document, position) == true) {
-      const offset = 0
+      var offset = 0
       while (offset < 100 && finding == null) {
-        const finding = document
+        var finding = document
           .lineAt(position.line - offset)
           .text.match(/\"\"\"/)
         if (finding != null) {
-          const currentKey = document
+          var currentKey = document
             .lineAt(position.line - offset)
             .text.match(/(?<![^ ]+ *)\w+/)
         }
@@ -130,17 +130,17 @@ function activate(context) {
   }
 
   function replaceLocalvariables(value, position, document) {
-    const matchedVariables = value.matchAll(/\$\{\w+\}/g)
-    for (const variable of matchedVariables) {
-      const offset = 0
-      const localVariableName = variable[0].substring(2, variable[0].length - 1)
-      const finding = null
+    let matchedVariables = value.matchAll(/\$\{\w+\}/g)
+    for (let variable of matchedVariables) {
+      let offset = 0
+      let localVariableName = variable[0].substring(2, variable[0].length - 1)
+      var finding = null
       while (offset < 100 && finding == null && sectionBoundary == null) {
-        const pattern = new RegExp(`(?<=@define +${localVariableName}: *).+`)
-        const finding = document
+        let pattern = new RegExp(`(?<=@define +${localVariableName}: *).+`)
+        var finding = document
           .lineAt(position.line - offset)
           .text.match(pattern)
-        const sectionBoundary = document
+        var sectionBoundary = document
           .lineAt(position.line - offset)
           .text.match(/(?<![^ ]+ *)\[/)
         if (finding != null) {
@@ -152,22 +152,22 @@ function activate(context) {
     return value
   }
 
-  class Multiline {
+  class mergeMultiline {
     constructor(document) {
-      const splitedDocument = document.getText().split('"""')
-      const mergedLines = []
-      const startPositions = []
-      const endPositions = []
-      const keys = []
+      let splitedDocument = document.getText().split('"""')
+      let mergedLines = []
+      let startPositions = []
+      let endPositions = []
+      let keys = []
       for (let i = 1; i < splitedDocument.length; i += 2) {
-        const singleMergedLine = splitedDocument[i].replace(/[\r\n]+/g, '')
-        const linesBefore = splitedDocument[i - 1].split('\n')
-        const startPosition = 0
-        const lastLine = ''
-        for (const j = 0; j < i; j++) {
+        let singleMergedLine = splitedDocument[i].replace(/[\r\n]+/g, '')
+        let linesBefore = splitedDocument[i - 1].split('\n')
+        let startPosition = 0
+        let lastLine = ''
+        for (let j = 0; j < i; j++) {
           startPosition += splitedDocument[j].length + 3
         }
-        for (const line of linesBefore) {
+        for (let line in linesBefore) {
           lastLine = linesBefore[line]
         }
         mergedLines.push(singleMergedLine)
@@ -182,9 +182,9 @@ function activate(context) {
     }
   }
 
-  class CustomVariable {
+  class getCustomVariable {
     constructor(document) {
-      const memoryNumber = document
+      var memoryNumber = document
         .getText()
         .match(/(?<=number\[?\]? +)\w+|(?<=@memory +)\w+(?=: *number\[?\]?)/gi)
       if (memoryNumber == null) {
@@ -192,13 +192,13 @@ function activate(context) {
       } else {
         this.memoryNumber = memoryNumber
       }
-      const resourceNumber = document.getText().match(/(?<=\[resource_)\w+/gi)
+      var resourceNumber = document.getText().match(/(?<=\[resource_)\w+/gi)
       if (resourceNumber == null) {
         this.resourceNumber = []
       } else {
         this.resourceNumber = resourceNumber
       }
-      const memoryFloat = document
+      var memoryFloat = document
         .getText()
         .match(/(?<=float\[?\]? +)\w+|(?<=@memory +)\w+(?=: *float\[?\]?)/gi)
       if (memoryFloat == null) {
@@ -206,7 +206,7 @@ function activate(context) {
       } else {
         this.memoryFloat = memoryFloat
       }
-      const memoryUnit = document
+      var memoryUnit = document
         .getText()
         .match(/(?<=unit\[?\]? +)\w+|(?<=@memory +)\w+(?=: *unit\[?\]?)/gi)
       if (memoryUnit == null) {
@@ -214,7 +214,7 @@ function activate(context) {
       } else {
         this.memoryUnit = memoryUnit
       }
-      const memoryString = document
+      var memoryString = document
         .getText()
         .match(/(?<=string +)\w+|(?<=@memory +)\w+(?=: *string)/gi)
       if (memoryString == null) {
@@ -222,7 +222,7 @@ function activate(context) {
       } else {
         this.memoryString = memoryString
       }
-      const memoryBool = document
+      var memoryBool = document
         .getText()
         .match(
           /(?<=boolean\[?\]? +)\w+|(?<=@memory +)\w+(?=: *boolean\[?\]?)/gi,
@@ -241,21 +241,21 @@ function activate(context) {
   const tokenModifiers = ['default']
   const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers)
 
-  class Provider {
+  class provider {
     provideDocumentSemanticTokens(document) {
       const builder = new vscode.SemanticTokensBuilder()
-      const customVariables = new CustomVariable(document)
-      const allVariables = []
-      for (const variableType of customVariables) {
+      let customVariables = new getCustomVariable(document)
+      let allVariables = []
+      for (let variableType in customVariables) {
         customVariables[variableType].forEach(variable =>
           allVariables.push(variable),
         )
       }
       allVariables.forEach(variable => {
-        const pattern = new RegExp(variable, 'g')
-        const matchs = document.getText().matchAll(pattern)
-        for (const matchedVariables of matchs) {
-          const position = new vscode.Position(
+        let pattern = new RegExp(variable, 'g')
+        let matchs = document.getText().matchAll(pattern)
+        for (let matchedVariables of matchs) {
+          let position = new vscode.Position(
             new indexToPosition(
               matchedVariables.index,
               document.getText(),
@@ -292,7 +292,7 @@ function activate(context) {
   const semanticProvider =
     vscode.languages.registerDocumentSemanticTokensProvider(
       selector,
-      new Provider(),
+      new provider(),
       legend,
     )
 
@@ -310,7 +310,7 @@ function activate(context) {
     'rwini',
     {
       provideCompletionItems(document, position) {
-        const currentLine = document.lineAt(position).text
+        let currentLine = document.lineAt(position).text
         if (
           currentLine.match(/(?<![^ ]+ *)\[/) != null &&
           currentLine.indexOf('_') < 0 &&
@@ -332,13 +332,13 @@ function activate(context) {
     'rwini',
     {
       provideCompletionItems(document, position) {
-        const currentLine = document.lineAt(position).text
+        let currentLine = document.lineAt(position).text
         if (
           currentLine.match(/[:,#,_,[]/) == null &&
           getIfMultiline(document, position) == false
         ) {
-          const currentSection = getSection(document, position)
-          const keysOfSection = Object.keys(allKeys[currentSection]).concat(
+          let currentSection = getSection(document, position)
+          let keysOfSection = Object.keys(allKeys[currentSection]).concat(
             Object.keys(allKeys['template']),
           )
           return keysOfSection.map(names => {
@@ -354,7 +354,7 @@ function activate(context) {
   )
 
   function getAllCustomVariableCompletion(document) {
-    const customVariableCompletions = new CustomVariable(document).memoryNumber
+    let customVariableCompletions = new getCustomVariable(document).memoryNumber
       .map(names => {
         return new vscode.CompletionItem(
           'memory.'.concat(names),
@@ -362,7 +362,7 @@ function activate(context) {
         )
       })
       .concat(
-        new CustomVariable(document).memoryFloat.map(names => {
+        new getCustomVariable(document).memoryFloat.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Constant,
@@ -370,7 +370,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new CustomVariable(document).memoryBool.map(names => {
+        new getCustomVariable(document).memoryBool.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Constant,
@@ -378,7 +378,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new CustomVariable(document).resourceNumber.map(names => {
+        new getCustomVariable(document).resourceNumber.map(names => {
           return new vscode.CompletionItem(
             'resource.'.concat(names),
             vscode.CompletionItemKind.Constant,
@@ -386,7 +386,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new CustomVariable(document).memoryUnit.map(names => {
+        new getCustomVariable(document).memoryUnit.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Field,
@@ -394,7 +394,7 @@ function activate(context) {
         }),
       )
       .concat(
-        new CustomVariable(document).memoryString.map(names => {
+        new getCustomVariable(document).memoryString.map(names => {
           return new vscode.CompletionItem(
             'memory.'.concat(names),
             vscode.CompletionItemKind.Text,
@@ -408,15 +408,15 @@ function activate(context) {
     'rwini',
     {
       provideCompletionItems(document, position) {
-        const currentLine = document.lineAt(position).text
+        let currentLine = document.lineAt(position).text
         if (currentLine.match(/:/) != null) {
-          const currentSection = getSection(document, position)
-          const currentKey = currentLine.match(/(?<![^ ]+ *)\w+/)
-          const currentValue = currentLine.substring(currentKey[0].length + 1)
-          const type = allKeys[currentSection][currentKey[0]][0]
+          let currentSection = getSection(document, position)
+          let currentKey = currentLine.match(/(?<![^ ]+ *)\w+/)
+          let currentValue = currentLine.substring(currentKey[0].length + 1)
+          let type = allKeys[currentSection][currentKey[0]][0]
           if (type.match(/(?<!unit)Ref/) == null) {
             let completions
-            const memorys = []
+            let memorys = []
             switch (type) {
               case 'bool':
                 if (currentValue.match(/[^ ]/) == null) {
@@ -440,8 +440,8 @@ function activate(context) {
                 break
               case 'memory':
                 {
-                  const customVariables = new CustomVariable(document)
-                  for (const variableType of customVariables) {
+                  let customVariables = new getCustomVariable(document)
+                  for (let variableType in customVariables) {
                     customVariables[variableType].forEach(variable =>
                       memorys.push(variable),
                     )
@@ -458,7 +458,7 @@ function activate(context) {
             return completions
           } else {
             //Section-ref completion
-            const sectionName = type.slice(0, -3)
+            let sectionName = type.slice(0, -3)
             return getCustomSections(sectionName, document).map(names => {
               return new vscode.CompletionItem(
                 names,
@@ -478,8 +478,8 @@ function activate(context) {
     'rwini',
     {
       provideCompletionItems(document, position) {
-        const currentSection = getSection(document, position)
-        const currentLine = document.lineAt(position).text
+        let currentSection = getSection(document, position)
+        let currentLine = document.lineAt(position).text
         let currentKey
         if (
           currentLine.match(/:/) != null &&
@@ -536,7 +536,7 @@ function activate(context) {
                 }),
               )
               .concat(
-                new CustomVariable(document).resourceNumber.map(names => {
+                new getCustomVariable(document).resourceNumber.map(names => {
                   return new vscode.CompletionItem(
                     'resource.'.concat(names),
                     vscode.CompletionItemKind.Constant,
@@ -556,22 +556,22 @@ function activate(context) {
   const keyHoverPrompt = vscode.languages.registerHoverProvider('rwini', {
     provideHover(document, position) {
       if (document.lineAt(position).text.indexOf(':') > position.character) {
-        const currentSection = getSection(document, position)
-        const key = document.getText(
+        let currentSection = getSection(document, position)
+        let key = document.getText(
           document.getWordRangeAtPosition(position, /@?\w+/),
         )
-        const occurSections = ''
-        for (const section of allKeys) {
+        let occurSections = ''
+        for (let section in allKeys) {
           if (allKeys[section][key] != undefined) {
             occurSections += `[${section}](ValueType: ${allKeys[section][key][0]})  `
           } else {
-            const MLKey = key.slice(0, -3)
+            let MLKey = key.slice(0, -3)
             if (allKeys[section][MLKey] != undefined) {
               occurSections += `[${section}](ValueType: ${allKeys[section][MLKey][0]})  `
             }
           }
         }
-        const markdownContent = new vscode.MarkdownString(
+        let markdownContent = new vscode.MarkdownString(
           `Translation: \'${allKeys[currentSection][key][2]}\'  
 					 Section: ${occurSections}  
 					 ------  
@@ -585,17 +585,17 @@ function activate(context) {
 
   const valueHoverPrompt = vscode.languages.registerHoverProvider('rwini', {
     provideHover(document, position) {
-      const value = document.getText(document.getWordRangeAtPosition(position))
+      var value = document.getText(document.getWordRangeAtPosition(position))
       if (
         document.lineAt(position).text.indexOf(':') < position.character ||
         getIfMultiline(document, position) == true
       ) {
-        const valueInfo = valueType[value]
+        let valueInfo = valueType[value]
         if (valueInfo != undefined) {
           return new vscode.Hover(`type: ${valueInfo[0]}`)
         } else {
-          const customVariables = new CustomVariable(document)
-          for (const variable of customVariables) {
+          let customVariables = new getCustomVariable(document)
+          for (let variable in customVariables) {
             if (customVariables[variable].includes(value)) {
               return new vscode.Hover(`type: ${variable}`)
             }
@@ -618,39 +618,39 @@ function activate(context) {
 
   const fileJumpHoverPrompt = vscode.languages.registerHoverProvider('rwini', {
     provideHover(document, position) {
-      const range = document.getWordRangeAtPosition(
+      let range = document.getWordRangeAtPosition(
         position,
         /(ROOT:)?[\w\.\/-]+/i,
       )
-      const filePath = document.getText(range)
-      const mainFolders = vscode.workspace.workspaceFolders
+      let filePath = document.getText(range)
+      let mainFolders = vscode.workspace.workspaceFolders
       if (filePath && isFileName(filePath)) {
         let fileUri
         if (filePath.startsWith('ROOT:')) {
           //Finding the correct folder path
-          const rootPath = path.dirname(mainFolders[0].uri.fsPath)
-          const documentPath = path.dirname(document.uri.fsPath)
-          const remainPath = documentPath.substring(
+          let rootPath = path.dirname(mainFolders[0].uri.fsPath)
+          let documentPath = path.dirname(document.uri.fsPath)
+          let remainPath = documentPath.substring(
             rootPath.length,
             documentPath.length,
           )
-          const offset = 1
-          const finding = false
+          let offset = 1
+          let finding = false
           while (!finding && offset < 50) {
             if (remainPath.charAt(offset) == '\\') {
               finding = true
             }
             offset++
           }
-          const currentDir = documentPath.substring(0, rootPath.length + offset)
+          let currentDir = documentPath.substring(0, rootPath.length + offset)
           fileUri = vscode.Uri.file(
             path.join(currentDir, filePath.substring(5, filePath.length)),
           )
         } else {
-          const currentDir = path.dirname(document.uri.fsPath)
+          let currentDir = path.dirname(document.uri.fsPath)
           fileUri = vscode.Uri.file(path.join(currentDir, filePath))
         }
-        const markdownString = new vscode.MarkdownString(
+        let markdownString = new vscode.MarkdownString(
           `Open File: [${filePath}](${fileUri})`,
         )
         markdownString.isTrusted = true
@@ -671,9 +671,9 @@ function activate(context) {
     'rwini',
     {
       provideFoldingRanges(document) {
-        const ranges = []
-        for (const i = 0; i < document.lineCount; i++) {
-          const currentLine = document.lineAt(i).text
+        let ranges = []
+        for (let i = 0; i < document.lineCount; i++) {
+          let currentLine = document.lineAt(i).text
           if (currentLine.match(/(?<![^ ]+ *)\[/)) {
             const start = i
             i++
@@ -711,9 +711,9 @@ function activate(context) {
   const multilineFoldingProvider =
     vscode.languages.registerFoldingRangeProvider('rwini', {
       provideFoldingRanges(document) {
-        const ranges = []
-        for (const i = 0; i < document.lineCount; i++) {
-          const currentLine = document.lineAt(i).text
+        let ranges = []
+        for (let i = 0; i < document.lineCount; i++) {
+          let currentLine = document.lineAt(i).text
           if (currentLine.match(/\"\"\"/)) {
             const start = i
             i++
@@ -741,7 +741,7 @@ function activate(context) {
 
   // Diagnostic
   function uniquenessTest(string, RegExp) {
-    const remains = string.replace(RegExp, '#')
+    let remains = string.replace(RegExp, '#')
     if (remains.match(/[^ #]/) != null || remains.split('#').length > 2) {
       return false
     } else {
@@ -786,25 +786,23 @@ function activate(context) {
   vscode.workspace.onDidChangeTextDocument(event => {
     const diagnostics = []
     const totalLineNumber = event.document.getText().split('\n').length
-    const allSections = event.document
-      .getText()
-      .matchAll(/(?<=\n *\[)[^_\]]+/gim)
-    for (const section of allSections) {
+    let allSections = event.document.getText().matchAll(/(?<=\n *\[)[^_\]]+/gim)
+    for (let section of allSections) {
       //Check section
       if (sections[section[0]] == undefined) {
-        const sectionPosition = new indexToPosition(
+        let sectionPosition = new indexToPosition(
           section.index,
           event.document.getText(),
         )
-        const sectionStart = new vscode.Position(
+        let sectionStart = new vscode.Position(
           sectionPosition.line,
           sectionPosition.char,
         )
-        const sectionEnd = new vscode.Position(
+        let sectionEnd = new vscode.Position(
           sectionPosition.line,
           sectionPosition.char + section[0].length,
         )
-        const range = new vscode.Range(sectionStart, sectionEnd)
+        let range = new vscode.Range(sectionStart, sectionEnd)
         if (getIfMultiline(event.document, sectionStart) == false) {
           const diagnostic = new vscode.Diagnostic(
             range,
@@ -815,21 +813,21 @@ function activate(context) {
         }
       }
     }
-    for (const line = 0; line < totalLineNumber; line++) {
+    for (let line = 0; line < totalLineNumber; line++) {
       //Check key
-      const currentLine = event.document.lineAt(line).text
-      const currentKey = /(?<![^ ]+ *)\w+/.exec(currentLine)
+      let currentLine = event.document.lineAt(line).text
+      let currentKey = /(?<![^ ]+ *)\w+/.exec(currentLine)
       if (
         currentKey !== null &&
         currentKey[0].match(/(body|leg|arm|effect|mutator)\d?_/) == null
       ) {
-        const keyStart = new vscode.Position(line, currentKey.index)
-        const keyEnd = new vscode.Position(
+        let keyStart = new vscode.Position(line, currentKey.index)
+        let keyEnd = new vscode.Position(
           line,
           currentKey.index + currentKey[0].length,
         )
-        const range = new vscode.Range(keyStart, keyEnd)
-        const currentSection = getSection(event.document, keyStart)
+        let range = new vscode.Range(keyStart, keyEnd)
+        let currentSection = getSection(event.document, keyStart)
         if (
           allKeys[currentSection] != undefined &&
           currentSection != '' &&
@@ -848,19 +846,19 @@ function activate(context) {
           }
           //Check value
           else if (currentLine.match(/\"\"\"/) == null) {
-            const valueStartChar = currentKey.index + currentKey[0].length + 1
-            const valueStart = new vscode.Position(line, valueStartChar)
-            const valueEnd = new vscode.Position(
+            let valueStartChar = currentKey.index + currentKey[0].length + 1
+            let valueStart = new vscode.Position(line, valueStartChar)
+            let valueEnd = new vscode.Position(
               line,
               valueStartChar + currentLine.substring(valueStartChar).length,
             )
-            const currentValue = replaceLocalvariables(
+            let currentValue = replaceLocalvariables(
               currentLine.substring(valueStartChar),
               valueStart,
               event.document,
             )
-            const range = new vscode.Range(valueStart, valueEnd)
-            const expectedValue = allKeys[currentSection][currentKey[0]][0]
+            let range = new vscode.Range(valueStart, valueEnd)
+            let expectedValue = allKeys[currentSection][currentKey[0]][0]
             const preDiagnostic = new vscode.Diagnostic(
               range,
               `Unexpected value:\'${currentValue}\'(type=\'${valueType[currentValue]}\'), Key: ${currentKey}(expectedType=\'${expectedValue}\')`,
@@ -873,40 +871,40 @@ function activate(context) {
         }
       }
     }
-    const multilines = new Multiline(event.document)
-    for (const line of multilines.mergedLines) {
+    let multilines = new mergeMultiline(event.document)
+    for (let line in multilines.mergedLines) {
       //Check multiline
-      const currentKey = multilines.keys[line]
-      const valueStartPosition = new indexToPosition(
+      let currentKey = multilines.keys[line]
+      let valueStartPosition = new indexToPosition(
         multilines.startPositions[line],
         event.document.getText(),
       )
-      const valueStart = new vscode.Position(
+      let valueStart = new vscode.Position(
         valueStartPosition.line,
         valueStartPosition.char,
       )
-      const currentSection = getSection(event.document, valueStart)
+      let currentSection = getSection(event.document, valueStart)
       if (allKeys[currentSection] != undefined && currentSection != '') {
         if (
           allKeys[currentSection][currentKey[0]] != undefined ||
           allKeys[currentSection][currentKey[0].slice(0, -3)] != undefined
         ) {
-          const currentValue = replaceLocalvariables(
+          let currentValue = replaceLocalvariables(
             multilines.mergedLines[line],
             valueStart,
             event.document,
           )
 
-          const valueEndPosition = new indexToPosition(
+          let valueEndPosition = new indexToPosition(
             multilines.endPositions[line],
             event.document.getText(),
           )
-          const valueEnd = new vscode.Position(
+          let valueEnd = new vscode.Position(
             valueEndPosition.line,
             valueEndPosition.char,
           )
-          const range = new vscode.Range(valueStart, valueEnd)
-          const expectedValue = allKeys[currentSection][currentKey[0]][0]
+          let range = new vscode.Range(valueStart, valueEnd)
+          let expectedValue = allKeys[currentSection][currentKey[0]][0]
           const preDiagnostic = new vscode.Diagnostic(
             range,
             `Unexpected value:\'${currentValue}\'(type=\'${valueType[currentValue]}\'), Key: ${currentKey}(expectedType=\'${expectedValue}\')`,

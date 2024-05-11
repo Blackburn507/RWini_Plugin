@@ -2,5 +2,6 @@
     "compilerOptions": {
         "target": "ESNext",
         "moduleResolution": "Bundler",
+        "checkJs": true
     }
 }

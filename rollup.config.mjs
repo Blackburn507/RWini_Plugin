@@ -1,5 +1,6 @@
 import json from '@rollup/plugin-json'
 import nodeResolve from '@rollup/plugin-node-resolve'
+import terser from '@rollup/plugin-terser'
 
 /** @type {import('rollup').RollupOptions} */
 export default {
@@ -11,5 +12,5 @@ export default {
     external: [
         'vscode'
     ],
-    plugins: [json(), nodeResolve()]
+    plugins: [json(), nodeResolve(), terser()]
 }

@@ -1,4 +1,5 @@
 import json from '@rollup/plugin-json'
+import nodeResolve from '@rollup/plugin-node-resolve'
 
 /** @type {import('rollup').RollupOptions} */
 export default {
@@ -7,5 +8,8 @@ export default {
         file: './dist/extension.js',
         format: 'cjs'
     },
-    plugins: [json]
+    external: [
+        'vscode'
+    ],
+    plugins: [json(), nodeResolve()]
 }

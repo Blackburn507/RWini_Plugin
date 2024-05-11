@@ -13,7 +13,7 @@ function activate(context) {
     constructor(index, text) {
       const lineNumber = 0
       const lastNewLine = 0
-      for (const i = 0; i < index; i++) {
+      for (let i = 0; i < index; i++) {
         if (text[i] == '\n') {
           lineNumber += 1
           lastNewLine = i
@@ -159,7 +159,7 @@ function activate(context) {
       const startPositions = []
       const endPositions = []
       const keys = []
-      for (const i = 1; i < splitedDocument.length; i += 2) {
+      for (let i = 1; i < splitedDocument.length; i += 2) {
         const singleMergedLine = splitedDocument[i].replace(/[\r\n]+/g, '')
         const linesBefore = splitedDocument[i - 1].split('\n')
         const startPosition = 0

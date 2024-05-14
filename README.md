@@ -2,8 +2,8 @@
 
 --- RWini-Plugin ---  
 Written By: Blackburn507  
-Date: 2024/5/9  
-Current Version: 2.0.1  
+Date: 2024/5/14  
+Current Version: 2.1.0
 Description:  
 This is a VSCode plugin for editing a specific code for Rusted Warfare Modding.  
 Supported Features:  
@@ -14,6 +14,12 @@ Supported Features:
 - Section folding and multiline folding;  
 - Hover Prompts(Accepted value type, Chinese translations and descriptions for keys)  
   
-Contributor: NDT,hxyy(RWini code translation and description)
+Contributor: NDT,hxyy(RWini code translation and description)  
+  
+Update Log:  
+   2.1.0 (2024.5.14):  
+   - Auto-completing for more keys and parameters;  
+   - Improvements in hover promots for logic values;  
+   - Fix bugs;  
 
 

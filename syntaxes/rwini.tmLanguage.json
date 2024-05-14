@@ -80,11 +80,11 @@
 		},
 		"localRef": {
 			"name": "storage.type.localRef",
-			"match": "\\${[^{}]*}"
+			"match": "(\\${[^{}]*}|%(?={))"
 		},
 		"filePath": {
 			"name": "support.class.filePath",
-			"match": "(ROOT:)?[\\w\\/]+\\.(ini|txt|template|png|ogg|wav)"
+			"match": "(ROOT:)?[^ ]+\\.(ini|txt|template|png|ogg|wav)"
 		},
 
 
@@ -101,19 +101,23 @@
 			"begin": "(distance|distanceSquared|distanceBetween|distanceBetweenSquared|int|length|squareRoot|min|max|cos|sin|directionBetween|rnd)\\(",
 			"end": "\\)",
 			"patterns":[
+				{"include": "#bool"},
+			    {"include": "#number"}, 
+				{"include": "#string"}, 
 				{"include": "#dynamicValue"},
-				{"include": "#number"},
 				{"include": "#localRef"},
 				{"include": "#function"}
 			]
 		},
 		"functionString": {
 			"name": "support.function",
-			"begin": "(%|debug|debugPassThrough|str|substring|length|uppercase|lowercase)\\(",
+			"begin": "(debug|debugPassThrough|str|substring|length|uppercase|lowercase)\\(",
 			"end": "\\)",
 			"patterns":[
+				{"include": "#bool"},
+			    {"include": "#number"}, 
+				{"include": "#string"}, 
 				{"include": "#dynamicValue"},
-				{"include": "#number"},
 				{"include": "#localRef"},
 				{"include": "#function"}
 			]
@@ -123,8 +127,10 @@
 			"begin": "(select)\\(",
 			"end": "\\)",
 			"patterns":[
+				{"include": "#bool"},
+			    {"include": "#number"}, 
+				{"include": "#string"}, 
 				{"include": "#dynamicValue"},
-				{"include": "#number"},
 				{"include": "#localRef"},
 				{"include": "#function"}
 			]
@@ -173,7 +179,7 @@
 		},
 		"customVariable": {
 			"name": "variable.parameter.customVariable",
-			"match": "memory\\.\\w+|resource\\.\\w+|null"
+			"match": "memory\\.\\w+|resource\\.\\w+|null|index"
 		},
 		"customVariableWithPara": {
 			"name": "variable.parameter.customVariableWithPara",
@@ -183,7 +189,7 @@
 		},
 		"unitRef": {
 			"name": "support.class.unitRef",
-			"match": "(self|parent|attacking|transporting|lastDamageBy|activeWaypointTarget|nearestUnit|nullUnit|attachment|thisActionTarget|eventSource|globalSearchForFirstUnit|customTarget1|customTarget2)(?!\\()"
+			"match": "(self|parent|attacking|transporting|lastDamageBy|activeWaypointTarget|nearestUnit|nullUnit|attachment|thisActionTarget|eventSource|globalSearchForFirstUnit|customTarget1|customTarget2)(?![\\w\\(]+)"
 		},
 		"unitRefWithPara": {
 			"name": "support.class.unitRef",
@@ -203,7 +209,7 @@
 		},
 		"propertyRef":{
 			"name": "constant.numeric.propertyRef",
-			"match": "\\.(height|maxHp|hp|ammo|maxShield|maxEnergy|ammoIncludingQueued|energy|energyIncludingQueued|shield|kills|queueSize|teamId|x|y|z|dir|priceCredits|tags|transportingCount|numberOfAttachedUnits|isAtimeAlive|lastConverted|customTimer|numberOfUnitsInTeam|numberOfUnitsInAllyNotOwnTeam|numberOfUnitsInEnemyTeam|numberOfUnitsInNeutralTeam|numberOfUnitsInAggressiveTeam|numberOfUnitsInAllTeams|mapWidth|mapHeight|numberOfQueuedWaypoints|speed|maxspeed|builtAmount|completed|maxMoveSpeed|numberOfConnections)"
+			"match": "\\.(height|maxHp|hp|ammo|maxShield|maxEnergy|ammoIncludingQueued|energy|energyIncludingQueued|shield|kills|queueSize|teamId|x|y|z|dir|priceCredits|tags|transportingCount|numberOfAttachedUnits|timeAlive|lastConverted|customTimer|numberOfUnitsInTeam|numberOfUnitsInAllyNotOwnTeam|numberOfUnitsInEnemyTeam|numberOfUnitsInNeutralTeam|numberOfUnitsInAggressiveTeam|numberOfUnitsInAllTeams|mapWidth|mapHeight|numberOfQueuedWaypoints|speed|maxspeed|builtAmount|completed|maxMoveSpeed|numberOfConnections)"
 		}
 		
 	}

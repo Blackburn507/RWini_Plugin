@@ -4,7 +4,7 @@
   "description": "A plugin which improves the coding for MODs of a RTS game RustedWarfare.",
   "publisher": "Blackburn",
   "icon": "rwp.png",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "engines": {
     "vscode": "^1.80.0"
   },

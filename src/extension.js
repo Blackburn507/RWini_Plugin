@@ -108,7 +108,7 @@ function activate(context) {
 		}
 	};
 
-	function replaceLocalvariables(value,position,document){
+	function replaceLocalVariables(value,position,document){
 		let matchedVariables = value.matchAll(/\$\{\w+\}/g)
 		for (let variable of matchedVariables){
 			let offset = 0
@@ -556,7 +556,7 @@ function activate(context) {
 			//Check key
 			let currentLine = event.document.lineAt(line).text;
 			let currentKey = (/(?<![^ ]+ *)\w+/).exec(currentLine);
-			if (currentKey!==null && currentKey[0].match(/(body|leg|arm|effect|mutator)\d?_/)==null){
+			if (currentKey!==null && currentKey[0].match(/(body|leg|arm|effect|mutator)\d+_/)==null){
 				let keyStart = new vscode.Position(line,currentKey.index);
 				let keyEnd = new vscode.Position(line,currentKey.index+currentKey[0].length);
 				let range = new vscode.Range(keyStart,keyEnd);
@@ -571,7 +571,7 @@ function activate(context) {
 						let valueStartChar = currentKey.index+currentKey[0].length+1
 						let valueStart = new vscode.Position(line,valueStartChar);
 						let valueEnd = new vscode.Position(line,valueStartChar+currentLine.substring(valueStartChar).length);
-						let currentValue = replaceLocalvariables(currentLine.substring(valueStartChar),valueStart,event.document)
+						let currentValue = replaceLocalVariables(currentLine.substring(valueStartChar),valueStart,event.document)
 					    let range = new vscode.Range(valueStart,valueEnd);
 					    let expectedValue = allKeys[currentSection][currentKey[0]][0];
 						let valueInfo = [];
@@ -593,7 +593,7 @@ function activate(context) {
 			let currentSection = getSection(event.document,valueStart);
 			if (allKeys[currentSection]!=undefined && currentSection!=''){
 				if (allKeys[currentSection][currentKey[0]]!=undefined || allKeys[currentSection][currentKey[0].slice(0,-3)]!=undefined){
-					let currentValue = replaceLocalvariables(multilines.mergedLines[line],valueStart,event.document)
+					let currentValue = replaceLocalVariables(multilines.mergedLines[line],valueStart,event.document)
 					let valueEndPosition = new indexToPosition(multilines.endPositions[line],event.document.getText())
 					let valueEnd = new vscode.Position(valueEndPosition.line,valueEndPosition.char);
 					let range = new vscode.Range(valueStart,valueEnd);

@@ -2,7 +2,7 @@
   "name": "rwiniplugin",
   "displayName": "RWini_Plugin",
   "description": "A plugin which improves the coding for MODs of a RTS game RustedWarfare.",
-  "publisher": "Blackburn",
+  "publisher": "M507",
   "icon": "rwp.png",
   "version": "2.1.2",
   "repository": {

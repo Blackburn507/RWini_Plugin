@@ -4,7 +4,7 @@
   "description": "A plugin which improves the coding for MODs of a RTS game RustedWarfare.",
   "publisher": "Blackburn",
   "icon": "rwp.png",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Blackburn507/RWini_Plugin"

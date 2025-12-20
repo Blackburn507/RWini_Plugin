@@ -183,14 +183,14 @@ function activate(context) {
 				customVariables[variableType].forEach(variable=>allVariables.push(variable))
 			};
 			allVariables.forEach(variable=>{
-				let pattern = new RegExp(`${variable}(?=[ =,\n:]+)`,"g");
+				let pattern = new RegExp(`(?<!\\w)${variable}(?!\\w)`,"g");
 				let matchs = document.getText().matchAll(pattern);
 				for (let matchedVariables of matchs){
 					let position = new vscode.Position(
 						new indexToPosition(matchedVariables.index,document.getText()).line,
 						new indexToPosition(matchedVariables.index,document.getText()).char
 					);
-					if (document.lineAt(position).text.match(/setUnitMemory|defineUnitMemory|@memory|updateUnitMemory/)!=null || 
+					if (document.lineAt(position).text.match(/setUnitMemory|defineUnitMemory|@define|@memory|updateUnitMemory|shrinkArrays/)!=null || 
 						document.getText().substring(matchedVariables.index-7,matchedVariables.index)=='memory.' ||
 						getIfMultiline(document,position)
 					){builder.push(position.line,position.character-1,matchedVariables[0].length,0)}
@@ -384,7 +384,7 @@ function activate(context) {
 
 	const valueHoverPrompt = vscode.languages.registerHoverProvider('rwini',{
 	    provideHover(document,position){
-            let catchedValue = document.getText(document.getWordRangeAtPosition(position));
+            let catchedValue = document.getText(document.getWordRangeAtPosition(position,/\w+/));
 			if(document.lineAt(position).text.indexOf(':')<position.character || getIfMultiline(document,position)==true){
 				let valueInfo = [];
 		        for(let type in values){
@@ -556,7 +556,7 @@ function activate(context) {
 			//Check key
 			let currentLine = event.document.lineAt(line).text;
 			let currentKey = (/(?<![^ ]+ *)\w+/).exec(currentLine);
-			if (currentKey!==null && currentKey[0].match(/(body|leg|arm|effect|mutator)\d+_/)==null){
+			if (currentKey!==null && currentKey[0].match(/(body|leg|arm|effect|mutator)\d*_/)==null){
 				let keyStart = new vscode.Position(line,currentKey.index);
 				let keyEnd = new vscode.Position(line,currentKey.index+currentKey[0].length);
 				let range = new vscode.Range(keyStart,keyEnd);

@@ -8,6 +8,7 @@
 	    {"include": "#key"},
 		{"include": "#templateKey"},
 	    {"include": "#value"},
+		{"include": "#localValue"},
 		{"include": "#multilineValue"}
     ],
 	"repository": {
@@ -37,7 +38,7 @@
 			"match": "(?<!\\w+: *)(@\\w+)"
 		},
         
-
+		
 
 		"value": {
 			"name": "value",
@@ -54,6 +55,23 @@
 		   ]
 		},
 
+		"localValue": {
+			"name": "localValue",
+			"begin": "(?<=(@define|@global) +)(?!\"\"\")",
+			"end": "\n",
+			"patterns": [
+			    {"include": "#localVariable"},
+				{"include": "#bool"},
+			    {"include": "#number"}, 
+				{"include": "#string"}, 
+				{"include": "#localRef"},
+				{"include": "#filePath"},
+				{"include": "#function"},
+				{"include": "#dynamicValue"}
+		   ]
+		},
+
+
 		"multilineValue": {
 			"name": "multilineValue",
 			"begin": "(?<=\\w+: *)\"\"\"",
@@ -69,14 +87,18 @@
 		   ]
 		},
 
-		
+		"localVariable":{
+			"name": "storage.type.localVariable",
+			"match": "\\w+(?=\\=|:)"
+		},
+
 		"bool": {
 			"name": "constant.language.constantBool",
 			"match": "true|false|none"
 		},
 		"number": {
 			"name": "constant.numeric.constantNumber",
-			"match": "(?<!\\w+)\\d+\\.?\\d*"
+			"match": "(?<!\\w+)\\d+\\.?\\d*(?![a-rt-zA-Z])"
 		},
 		"localRef": {
 			"name": "storage.type.localRef",
@@ -174,12 +196,12 @@
 
 		"string": {
 			"name": "string.quoted.double",
-			"begin": "\"",
-			"end": "\""
+			"begin": "(?<!\")\"(?!\")",
+			"end": "(?<!\")\"(?!\")"
 		},
 		"customVariable": {
 			"name": "variable.parameter.customVariable",
-			"match": "memory\\.\\w+|resource\\.\\w+|null|index"
+			"match": "memory\\.|resource\\.|null|index"
 		},
 		"customVariableWithPara": {
 			"name": "variable.parameter.customVariableWithPara",
@@ -205,11 +227,11 @@
 		},
 		"boolRef":{
 			"name": "constant.language.boolRef",
-			"match": "\\.(isUnderwater|underwater|ground|isAtGroundHeight|flying|isFlying|isMoving|isAtTopSpeed|isInWater|isOverwater|isOverLiquid|isOverClift|isOverPassableTile|isOverOpenLand|height|hasResources|isResourceLargerThan|isEnergyRecharging|isAmmoEmpty|isEnergyFull|isEnergyEmpty|hasFlag|hasTags|globalTeamTags|isAttacking|hasActiveWaypoint|transportingUnitWithTags|isTransportUnloading|hasParent|hasTakenDamage|isOnNeutralTeam|hasUnitInTeam|noUnitInTeam|isInMap|isReversing|isControlledByAI|isAtTopSpeed|completed|teamDefeatedTech|teamWipedOut|teamVictory)"
+			"match": "\\.(isUnderwater|underwater|ground|isAtGroundHeight|flying|isFlying|isMoving|isAtTopSpeed|isInWater|isOverwater|isOverLiquid|isOverClift|isOverPassableTile|isOverOpenLand|height|hasResources|isResourceLargerThan|isEnergyRecharging|isAmmoEmpty|isEnergyFull|isEnergyEmpty|hasFlag|hasTags|globalTeamTags|isAttacking|hasActiveWaypoint|transportingUnitWithTags|isTransportUnloading|hasParent|hasTakenDamage|isOnNeutralTeam|hasUnitInTeam|noUnitInTeam|isInMap|isReversing|isControlledByAI|isAtTopSpeed|completed|teamDefeatedTech|teamWipedOut|teamVictory|contains)"
 		},
 		"propertyRef":{
 			"name": "constant.numeric.propertyRef",
-			"match": "\\.(height|maxHp|hp|ammo|maxShield|maxEnergy|ammoIncludingQueued|energy|energyIncludingQueued|shield|kills|queueSize|teamId|x|y|z|dir|priceCredits|tags|transportingCount|numberOfAttachedUnits|timeAlive|lastConverted|customTimer|numberOfUnitsInTeam|numberOfUnitsInAllyNotOwnTeam|numberOfUnitsInEnemyTeam|numberOfUnitsInNeutralTeam|numberOfUnitsInAggressiveTeam|numberOfUnitsInAllTeams|mapWidth|mapHeight|numberOfQueuedWaypoints|speed|maxspeed|builtAmount|completed|maxMoveSpeed|numberOfConnections)"
+			"match": "\\.(height|maxHp|hp|ammo|maxShield|maxEnergy|ammoIncludingQueued|energy|energyIncludingQueued|shield|kills|queueSize|teamId|x|y|z|dir|priceCredits|tags|transportingCount|numberOfAttachedUnits|timeAlive|lastConverted|customTimer|numberOfUnitsInTeam|numberOfUnitsInAllyNotOwnTeam|numberOfUnitsInEnemyTeam|numberOfUnitsInNeutralTeam|numberOfUnitsInAggressiveTeam|numberOfUnitsInAllTeams|mapWidth|mapHeight|numberOfQueuedWaypoints|speed|maxspeed|builtAmount|completed|maxMoveSpeed|numberOfConnections|size)"
 		}
 		
 	}

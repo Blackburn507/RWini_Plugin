@@ -2,7 +2,7 @@
 
 --- RWini-Plugin ---  
 Date: 2025/12/20
-Current Version: 2.1.3
+Current Version: 2.1.4
 Contributor: M507,ZeroDegress,NDT,hxyy
 Description:  
 This is a VSCode plugin for editing a specific code for Rusted Warfare 1.15 Modding.  
@@ -48,5 +48,8 @@ Update Log:
 
    2.1.3 (2025.12.20)
    - Improved README
+
+   2.1.4 (2025.12.20)
+   - Fix README (Trail1)
 
 

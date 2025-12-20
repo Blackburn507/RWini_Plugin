@@ -19,11 +19,13 @@ Supported Features:
 - Hover Prompts (Accepted value type, Chinese translations and descriptions for keys);
 - File Path Jump;
 
+
 简介:
 
 用于辅助编写铁锈战争1.15模组的ini代码的插件. 
 
 反馈该插件的Bug或交流RWini代码技术可以加入qq群212098363.
+
 
 目前支持功能:
 - 语法高亮;
@@ -33,6 +35,7 @@ Supported Features:
 - 节折叠与多行折叠;
 - 悬停提示 (键的值类型, 中文翻译和解释);
 - 文件路径点击跳转.
+
 
 高亮预览图如下(使用了我的RWGL项目展示):
 ![RWGLScreenshot](./README/RWGLScreenshot.jpg)
